@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>test</title>
+	<style>
+		body {
+			margin-left: 3vw;
+			margin-right: 3vw;
+			background-color: #eee;
+		}
+	</style>
+</head>
+<body>
+	<h4>Select an XML file :</h4>
+	<div style="border: 2px solid green ;width:fit-content;border-radius: 2px;">
+		<input style="margin:5px ;" type="file" id="file_input_id" accept="text/xml"/><br>
+		<button style="margin:5px ;" id="go" onclick="startUpload()">Upload</button><br>
+	</div>
+	<h4>Response :</h4><br>
+	<div id="result_id">
+		nothing yet...
+	</div>
+	<script>
+//Configure the username and password here (inside the apostrophies)
+// Example :
+// config_username = 'myusername';
+// config_password = 'mypassword';
+
+var config_username = 'CSNNNA66H45L219N'; // don't leave empty (see example above)
+var config_password = 'Annina@2018'; // don't leave empty (see example above)
+
+
+// the function that does all the work: (please don't change anything in the function)
+function startUpload(){
+    if(document.getElementById('file_input_id').files.length == 0 ){
+        alert('select a file first !');
+    }else{
+        formData = new FormData();
+        formData.append("file", document.getElementById('file_input_id').files[0]);
+
+        url = 'https://invioss730p.sanita.finanze.it/DocumentoSpesa730pWeb/DocumentoSpesa730pPort';
+        username = config_username;
+        password = config_password;
+        headers = new Headers();
+        headers.append('Authorization', 'Basic' + username + ":" + password);
+
+        fetch(url, {method: "POST",headers: headers, body: formData})
+        .then(response => response.text())
+        .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+        .then(data => {
+            document.getElementById("result_id").innerHTML = data;
+        })
+        .catch(e => console.log(e));
+    }
+}
+	</script>
+</body>
+</html>
